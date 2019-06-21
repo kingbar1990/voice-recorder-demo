@@ -1,0 +1,2 @@
+CREATE USER recorder WITH SUPERUSER PASSWORD 'recorder';
+CREATE DATABASE recorder WITH OWNER recorder;

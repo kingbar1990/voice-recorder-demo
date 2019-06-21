@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+  server:
+    container_name: audio_server
+    build: ./server
+    volumes:
+      - ./server/:/var/www/server
+    working_dir: /var/www/server
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    environment:
+      - DJANGO_SETTINGS_MODULE=src.settings.development
+    env_file:
+      - .env
+    depends_on:
+      - database
+
+  client:
+    image: node:latest
+    container_name: audio_client
+    volumes:
+      - ./client/:/var/www/client
+    working_dir: /var/www/client
+    command: yarn start
+    ports:
+      - 3000:3000
+
+  database:
+    container_name: database
+    image: postgres:latest
+    volumes:
+      - ./initial.sql:/docker-entrypoint-initdb.d/initial.sql
